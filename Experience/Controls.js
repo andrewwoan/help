@@ -28,7 +28,14 @@ export default class Controls {
 
         document.querySelector(".page").style.overflow = "visible";
 
-        this.setSmoothScroll();
+        if (
+            !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                navigator.userAgent
+            )
+        ) {
+            console.log("desktop");
+            this.setSmoothScroll();
+        }
         this.setScrollTrigger();
     }
 
@@ -115,6 +122,7 @@ export default class Controls {
         ScrollTrigger.matchMedia({
             // Desktop
             "(min-width: 969px)": () => {
+                this.se;
                 console.log("fired desktop");
 
                 // Resets
@@ -130,23 +138,37 @@ export default class Controls {
                         invalidateOnRefresh: true,
                     },
                 })
-                    .to(
+                    .fromTo(
                         this.actualBike.rotation,
+                        { y: 0 },
                         {
-                            y: Math.PI / 1,
+                            y: Math.PI,
                         },
                         "same"
                     )
-                    .to(
+                    .fromTo(
                         this.camera.perspectiveCamera.position,
+                        {
+                            x: 0,
+                            y: 0.5,
+                            z: 4,
+                        },
                         {
                             x: -5,
                             y: 6,
                         },
                         "same"
                     )
-                    .to(
+                    .fromTo(
                         this.zoom,
+                        {
+                            zoomValue: 1,
+                            onUpdate: () => {
+                                this.camera.perspectiveCamera.zoom =
+                                    this.zoom.zoomValue;
+                                this.camera.perspectiveCamera.updateProjectionMatrix();
+                            },
+                        },
                         {
                             zoomValue: 3,
                             onUpdate: () => {
@@ -157,8 +179,13 @@ export default class Controls {
                         },
                         "same"
                     )
-                    .to(
+                    .fromTo(
                         this.camera.perspectiveCamera.rotation,
+                        {
+                            x: 0.0374824366916615,
+                            y: 0,
+                            z: -0,
+                        },
                         {
                             x: -0.7607555792240429,
                             y: -0.5324252706006514,
@@ -327,15 +354,21 @@ export default class Controls {
                         invalidateOnRefresh: true,
                     },
                 })
-                    .to(
+                    .fromTo(
                         this.actualBike.rotation,
+                        { y: -Math.PI / 2 },
                         {
                             y: Math.PI / 1,
                         },
                         "same"
                     )
-                    .to(
+                    .fromTo(
                         this.camera.perspectiveCamera.position,
+                        {
+                            x: 0,
+                            y: 0.3,
+                            z: 4,
+                        },
                         {
                             x: -5,
                             y: 3,
@@ -343,8 +376,16 @@ export default class Controls {
                         },
                         "same"
                     )
-                    .to(
+                    .fromTo(
                         this.zoom,
+                        {
+                            zoomValue: 1,
+                            onUpdate: () => {
+                                this.camera.perspectiveCamera.zoom =
+                                    this.zoom.zoomValue;
+                                this.camera.perspectiveCamera.updateProjectionMatrix();
+                            },
+                        },
                         {
                             zoomValue: 2.3,
                             onUpdate: () => {
@@ -355,8 +396,13 @@ export default class Controls {
                         },
                         "same"
                     )
-                    .to(
+                    .fromTo(
                         this.camera.perspectiveCamera.rotation,
+                        {
+                            x: 0.0374824366916615,
+                            y: 0,
+                            z: -0,
+                        },
                         {
                             x: -0.4826867099146418,
                             y: -0.7487373908008822,
@@ -431,15 +477,6 @@ export default class Controls {
                         invalidateOnRefresh: true,
                     },
                 })
-                    .to(
-                        this.lookAtCube.position,
-                        {
-                            x: this.bikeChildren.seat.position.x,
-                            y: this.bikeChildren.seat.position.y,
-                            z: this.bikeChildren.seat.position.z,
-                        },
-                        "same"
-                    )
                     .to(
                         this.actualBike.rotation,
                         {
